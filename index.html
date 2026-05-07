@@ -77,9 +77,8 @@ const curYm=()=>{const n=new Date();return`${n.getFullYear()}-${String(n.getMont
 const ymLabel=ym=>{const[y,m]=ym.split('-');return new Date(y,m-1).toLocaleString('en-SG',{month:'long',year:'numeric'});};
 
 // Persistent storage with in-memory fallback
-const mem={};
-async function loadKey(k){try{if(window.storage){const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}return mem[k]?JSON.parse(mem[k]):null;}catch{return null;}}
-async function saveKey(k,v){try{if(window.storage)await window.storage.set(k,JSON.stringify(v));else mem[k]=JSON.stringify(v);}catch{}}
+async function loadKey(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;}}
+async function saveKey(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
 
 function Donut({data,size=130,inner=38,outer=58}){
   const total=data.reduce((s,d)=>s+d.value,0);
