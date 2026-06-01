@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="WanliWallet"/>
-<title>WanliWallet</title>
+<meta name="apple-mobile-web-app-title" content="Expense Tracker"/>
+<title>Expense Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Caprasimo&display=swap" rel="stylesheet"/>
@@ -44,7 +44,6 @@ button:active{transform:scale(.97)}
 .swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border-color .12s;-webkit-tap-highlight-color:transparent}
 .swatch.sel{border-color:#3A1A2E}
 .cancel-link{background:transparent;border:none;color:#B07090;font-size:13px;padding:6px;text-decoration:underline;min-height:auto}
-/* Month picker bottom sheet */
 .overlay{position:fixed;inset:0;background:rgba(58,26,46,0.4);z-index:200;display:flex;align-items:flex-end;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .sheet{background:rgba(255,238,246,0.98);border-radius:24px 24px 0 0;width:100%;max-height:68vh;overflow-y:auto;padding:.75rem 1rem max(1.5rem,env(safe-area-inset-bottom))}
 .handle{width:38px;height:4px;background:rgba(200,140,165,0.45);border-radius:2px;margin:0 auto 1rem}
@@ -52,9 +51,10 @@ button:active{transform:scale(.97)}
 .m-item:active{background:rgba(232,112,154,0.18)}
 .m-item.sel{background:rgba(232,112,154,0.13)}
 .yr-hdr{font-family:'Caprasimo',cursive;font-size:11px;color:#C0708A;padding:8px 12px 4px;letter-spacing:.06em}
-/* History tab */
 .hist-row{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent}
 .hist-row:active{background:rgba(232,112,154,0.08)}
+.cat-row{cursor:pointer;padding:4px;border-radius:10px;margin-bottom:14px;-webkit-tap-highlight-color:transparent}
+.cat-row:active{background:rgba(232,112,154,0.06)}
 </style>
 </head>
 <body>
@@ -64,7 +64,7 @@ button:active{transform:scale(.97)}
 <script>
 function bow(cx,cy,hw,hh,fill,knot,rot){const g0=rot?`<g transform="rotate(${rot} ${cx} ${cy})">`:'<g>';const lw=`M${cx},${cy} Q${cx-hw*.38},${cy-hh} ${cx-hw},${cy} Q${cx-hw},${cy} ${cx-hw*.38},${cy+hh} ${cx},${cy}Z`;const rw=`M${cx},${cy} Q${cx+hw*.38},${cy-hh} ${cx+hw},${cy} Q${cx+hw},${cy} ${cx+hw*.38},${cy+hh} ${cx},${cy}Z`;const kr=Math.max(4,hh*.34);const dx=cx-hw*.55,dxr=cx+hw*.55,dy0=cy-hh*.22,dy1=cy+hh*.22;return`${g0}<path d="${lw}" fill="${fill}" opacity="0.9"/><path d="${rw}" fill="${fill}" opacity="0.9"/><circle cx="${dx}" cy="${dy0}" r="1.8" fill="white" opacity="0.62"/><circle cx="${dx}" cy="${dy1}" r="1.8" fill="white" opacity="0.62"/><circle cx="${dxr}" cy="${dy0}" r="1.8" fill="white" opacity="0.62"/><circle cx="${dxr}" cy="${dy1}" r="1.8" fill="white" opacity="0.62"/><circle cx="${cx}" cy="${cy}" r="${kr}" fill="${knot}"/></g>`;}
 const bows=[[58,52,23,15,'#A8D8F0','#78B8D4',0],[188,30,18,11,'#F7E8A0','#D4C060',15],[316,68,23,15,'#E8C0F0','#B890D4',-10],[82,155,21,13,'#B8F0C8','#78D490',5],[230,130,26,16,'#F0B8C8','#D480A8',0],[350,195,20,13,'#A8D8F0','#78B8D4',-15],[132,238,22,14,'#F7E8A0','#D4C060',10],[275,250,20,12,'#B8F0C8','#78D490',0],[162,108,17,11,'#F0B8C8','#D480A8',-20],[360,138,21,13,'#E8C0F0','#B890D4',6],[14,198,18,11,'#A8D8F0','#78B8D4',12],[205,200,20,12,'#F7E8A0','#D4C060',-8],[22,88,16,10,'#E8C0F0','#B890D4',-5],[378,30,17,11,'#B8F0C8','#78D490',8]].map(b=>bow(...b)).join('');
-document.getElementById('bg').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none"><defs><pattern id="pk" x="10" y="10" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="2.8" fill="white" opacity="0.38"/></pattern><pattern id="mp" x="0" y="0" width="390" height="285" patternUnits="userSpaceOnUse"><rect width="390" height="285" fill="#FFB3CE"/><rect width="390" height="285" fill="url(#pk)"/>${bows}<text x="92" y="196" font-family="cursive" font-size="14" fill="#E8709A" opacity="0.3" transform="rotate(-15 92 196)">WanliWallet</text><text x="248" y="86" font-family="cursive" font-size="12" fill="#E8709A" opacity="0.28" transform="rotate(10 248 86)">WanliWallet</text><text x="288" y="260" font-family="cursive" font-size="11" fill="#E8709A" opacity="0.25" transform="rotate(-8 288 260)">WanliWallet</text></pattern></defs><rect width="100%" height="100%" fill="url(#mp)"/></svg>`;
+document.getElementById('bg').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none"><defs><pattern id="pk" x="10" y="10" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="2.8" fill="white" opacity="0.38"/></pattern><pattern id="mp" x="0" y="0" width="390" height="285" patternUnits="userSpaceOnUse"><rect width="390" height="285" fill="#FFB3CE"/><rect width="390" height="285" fill="url(#pk)"/>${bows}</pattern></defs><rect width="100%" height="100%" fill="url(#mp)"/></svg>`;
 </script>
 
 <script>
@@ -76,13 +76,11 @@ const today=()=>new Date().toISOString().slice(0,10);
 const curYm=()=>{const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;};
 const ymLabel=ym=>{const[y,m]=ym.split('-');return new Date(y,m-1).toLocaleString('en-SG',{month:'long',year:'numeric'});};
 
-// Persistent storage with in-memory fallback
 async function loadKey(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;}}
 async function saveKey(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
 
 function Donut({data,size=130,inner=38,outer=58}){
-  const total=data.reduce((s,d)=>s+d.value,0);
-  if(!total)return null;
+  const total=data.reduce((s,d)=>s+d.value,0);if(!total)return null;
   const cx=size/2,cy=size/2;let a=-Math.PI/2;
   const slices=data.map(d=>{const sw=(d.value/total)*2*Math.PI,x1=cx+outer*Math.cos(a),y1=cy+outer*Math.sin(a);a+=sw;const x2=cx+outer*Math.cos(a),y2=cy+outer*Math.sin(a),ix1=cx+inner*Math.cos(a-sw),iy1=cy+inner*Math.sin(a-sw),ix2=cx+inner*Math.cos(a),iy2=cy+inner*Math.sin(a),big=sw>Math.PI?1:0;return{...d,path:`M${x1},${y1} A${outer},${outer} 0 ${big} 1 ${x2},${y2} L${ix2},${iy2} A${inner},${inner} 0 ${big} 0 ${ix1},${iy1} Z`};});
   return React.createElement('svg',{width:size,height:size,viewBox:`0 0 ${size} ${size}`},slices.map((s,i)=>React.createElement('path',{key:i,d:s.path,fill:s.color})));
@@ -99,6 +97,7 @@ function NavIcon({id}){
 
 function App(){
   const[ready,setReady]=useState(false);
+  const[appName,setAppName]=useState('Expense Tracker');
   const[cats,setCats]=useState(DEF_CATS);
   const[expenses,setExp]=useState([]);
   const[budgets,setBudgets]=useState({});
@@ -113,21 +112,24 @@ function App(){
   const[saved,setSaved]=useState(false);
   const[showPicker,setShowPicker]=useState(false);
   const[formErr,setFormErr]=useState({});
+  const[catFilter,setCatFilter]=useState(null);
   const descRef=useRef(null);
 
-  // Load
-  useEffect(()=>{(async()=>{const[ex,bu,ca]=await Promise.all([loadKey('ww_exp'),loadKey('ww_bud'),loadKey('ww_cats')]);if(ex)setExp(ex);if(bu){setBudgets(bu);setBudDraft(bu);}if(ca)setCats(ca);setReady(true);})();},[]);
+  useEffect(()=>{(async()=>{
+    const[ex,bu,ca,nm]=await Promise.all([loadKey('ww_exp'),loadKey('ww_bud'),loadKey('ww_cats'),loadKey('ww_name')]);
+    if(ex)setExp(ex);if(bu){setBudgets(bu);setBudDraft(bu);}if(ca)setCats(ca);if(nm)setAppName(nm);
+    setReady(true);
+  })();},[]);
   useEffect(()=>{if(ready)saveKey('ww_exp',expenses);},[expenses,ready]);
   useEffect(()=>{if(ready)saveKey('ww_bud',budgets);},[budgets,ready]);
   useEffect(()=>{if(ready)saveKey('ww_cats',cats);},[cats,ready]);
-
-  // Auto-focus description field when Add tab opens
+  useEffect(()=>{if(ready&&appName)saveKey('ww_name',appName);},[appName,ready]);
   useEffect(()=>{if(tab==='add')setTimeout(()=>descRef.current?.focus(),160);},[tab,editId]);
 
-  // Build month list from earliest expense to today
+  const catById=id=>cats.find(c=>c.id===id);
+
   const monthList=useMemo(()=>{
-    const cur=curYm();
-    if(!expenses.length)return[cur];
+    const cur=curYm();if(!expenses.length)return[cur];
     const earliest=expenses.map(e=>e.date.slice(0,7)).sort()[0];
     const[ey,em]=earliest.split('-').map(Number);
     const list=[];let d=new Date(ey,em-1);
@@ -139,6 +141,17 @@ function App(){
   const histByYear=useMemo(()=>{const g={};monthList.forEach(m=>{const y=m.slice(0,4);(g[y]=g[y]||[]).push(m);});return Object.entries(g).sort(([a],[b])=>b-a);},[monthList]);
   const getMonthTotals=m=>{const ex=expenses.filter(e=>e.date.startsWith(m));return{spent:ex.reduce((s,e)=>s+Number(e.amount),0),count:ex.length};};
 
+  // Category filter
+  const catAllExps=useMemo(()=>{
+    if(!catFilter)return[];
+    return expenses.filter(e=>e.category===catFilter).sort((a,b)=>b.date.localeCompare(a.date));
+  },[catFilter,expenses]);
+  const catTotal=useMemo(()=>catAllExps.reduce((s,e)=>s+Number(e.amount),0),[catAllExps]);
+  const catByMonth=useMemo(()=>{
+    const g={};catAllExps.forEach(exp=>{const m=exp.date.slice(0,7);(g[m]=g[m]||[]).push(exp);});
+    return Object.entries(g).sort(([a],[b])=>b.localeCompare(a));
+  },[catAllExps]);
+
   // Current month
   const monthExp=expenses.filter(e=>e.date.startsWith(ym)).sort((a,b)=>b.date.localeCompare(a.date));
   const spending=cats.reduce((acc,c)=>{acc[c.id]=monthExp.filter(e=>e.category===c.id).reduce((s,e)=>s+Number(e.amount),0);return acc;},{});
@@ -146,39 +159,71 @@ function App(){
   const totalBudget=cats.reduce((s,c)=>s+(budgets[c.id]||0),0);
   const remaining=totalBudget-totalSpent;
   const budPct=totalBudget>0?Math.min(Math.round((totalSpent/totalBudget)*100),100):0;
-  const chartData=cats.filter(c=>spending[c.id]>0).map(c=>({name:c.label,value:spending[c.id],color:c.color}));
   const isOver=totalSpent>totalBudget&&totalBudget>0;
+  const chartData=cats.filter(c=>spending[c.id]>0).map(c=>({id:c.id,name:c.label,value:spending[c.id],color:c.color}));
+  const filteredCat=catFilter?catById(catFilter):null;
 
   const changeMonth=dir=>{const[y,m]=ym.split('-').map(Number);const d=new Date(y,m-1+dir);setYm(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);};
-
   const submit=()=>{
-    const errs={};
-    if(!form.description.trim())errs.description=true;
-    if(!form.amount)errs.amount=true;
-    if(Object.keys(errs).length){setFormErr(errs);return;}
-    setFormErr({});
+    const errs={};if(!form.description.trim())errs.description=true;if(!form.amount)errs.amount=true;
+    if(Object.keys(errs).length){setFormErr(errs);return;}setFormErr({});
     const entry={...form,amount:parseFloat(form.amount)};
     if(editId!==null){setExp(p=>p.map(e=>e.id===editId?{...entry,id:editId}:e));setEditId(null);}
     else setExp(p=>[...p,{...entry,id:Date.now()}]);
-    setForm({date:today(),category:cats[0]?.id||'',description:'',amount:'',notes:''});
-    setTab('home');
+    setForm({date:today(),category:cats[0]?.id||'',description:'',amount:'',notes:''});setTab('home');
   };
-
   const startEdit=exp=>{setForm({date:exp.date,category:exp.category,description:exp.description,amount:String(exp.amount),notes:exp.notes||''});setEditId(exp.id);setTab('add');};
   const cancelEdit=()=>{setEditId(null);setFormErr({});setForm({date:today(),category:cats[0]?.id||'',description:'',amount:'',notes:''});setTab('home');};
   const addCat=()=>{if(!newCat.label.trim())return;const id='cat_'+Date.now();setCats(p=>[...p,{id,label:newCat.label.trim(),color:newCat.color}]);setBudgets(b=>({...b,[id]:0}));setBudDraft(b=>({...b,[id]:0}));setNewCat({label:'',color:'#D85A30'});};
   const delCat=id=>{setCats(p=>p.filter(c=>c.id!==id));setExp(p=>p.filter(e=>e.category!==id));setBudgets(b=>{const n={...b};delete n[id];return n;});setBudDraft(b=>{const n={...b};delete n[id];return n;});setDelCatId(null);};
   const saveBudgets=()=>{setBudgets(budDraft);setSaved(true);setTimeout(()=>setSaved(false),1500);};
-  const catById=id=>cats.find(c=>c.id===id);
   const sf=k=>ev=>{setForm(f=>({...f,[k]:ev.target.value}));setFormErr(f=>({...f,[k]:false}));};
-  const goTo=t=>{if(t==='add'&&!editId){setForm({date:today(),category:cats[0]?.id||'',description:'',amount:'',notes:''});setFormErr({});}if(t==='settings')setBudDraft({...budgets});setTab(t);};
+  const goTo=t=>{
+    if(t!=='home')setCatFilter(null);
+    if(t==='add'&&!editId){setForm({date:today(),category:cats[0]?.id||'',description:'',amount:'',notes:''});setFormErr({});}
+    if(t==='settings')setBudDraft({...budgets});
+    setTab(t);
+  };
 
   const e=React.createElement;
-  if(!ready)return e('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',color:'#C09AAA',fontFamily:"'Caprasimo',cursive",fontSize:18}},'WanliWallet 🎀');
+  if(!ready)return e('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',color:'#C09AAA',fontFamily:"'Caprasimo',cursive",fontSize:18}},(appName||'Expense Tracker')+' 🎀');
+
+  // Reusable transaction row list
+  const txnRows=exps=>exps.map(exp=>{
+    const c=catById(exp.category),isDel=delExpId===exp.id;
+    return e('div',{key:exp.id,style:{borderRadius:12,overflow:'hidden',marginBottom:4}},
+      e('div',{className:'txn-row'},
+        e('div',{style:{display:'flex',alignItems:'center',gap:10,minWidth:0}},
+          e('div',{style:{width:40,height:40,borderRadius:13,background:(c?.color||'#888')+'28',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}},
+            e('div',{style:{width:12,height:12,borderRadius:'50%',background:c?.color||'#888'}})
+          ),
+          e('div',{style:{minWidth:0}},
+            e('p',{style:{fontSize:14,fontWeight:600,margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},exp.description),
+            e('p',{style:{fontSize:11,color:'#B07090',margin:'2px 0 0'}},
+              new Date(exp.date+'T00:00:00').toLocaleDateString('en-SG',{day:'numeric',month:'short'}),
+              exp.notes&&e('span',{style:{color:'#C09AAA'}},' · '+exp.notes)
+            )
+          )
+        ),
+        e('div',{style:{display:'flex',alignItems:'center',gap:2,flexShrink:0,marginLeft:8}},
+          e('span',{style:{fontSize:14,fontWeight:700,marginRight:2}},'S$'+fmt(exp.amount)),
+          e('button',{onClick:()=>startEdit(exp),className:'icon-btn','aria-label':'Edit'},'✏️'),
+          e('button',{onClick:()=>setDelExpId(isDel?null:exp.id),className:'icon-btn',style:{color:isDel?'#C04040':'#C09AAA'},'aria-label':'Delete'},'🗑️')
+        )
+      ),
+      isDel&&e('div',{className:'danger-zone',style:{display:'flex',alignItems:'center',justifyContent:'space-between'}},
+        e('span',{style:{fontSize:12,color:'#C04040'}},'Remove this entry?'),
+        e('div',{style:{display:'flex',gap:8}},
+          e('button',{onClick:()=>setDelExpId(null),style:{fontSize:12,padding:'5px 12px'}},'Cancel'),
+          e('button',{onClick:()=>{setExp(p=>p.filter(ex=>ex.id!==exp.id));setDelExpId(null);},style:{fontSize:12,padding:'5px 12px',color:'#C04040',borderColor:'#E8A0B0'}},'Delete')
+        )
+      )
+    );
+  });
 
   return e('div',null,
 
-    // ── Month picker bottom sheet ──
+    // Month picker modal
     showPicker&&e('div',{className:'overlay',onClick:ev=>{if(ev.target===ev.currentTarget)setShowPicker(false);}},
       e('div',{className:'sheet'},
         e('div',{className:'handle'}),
@@ -203,22 +248,58 @@ function App(){
     ),
 
     e('div',{className:'app'},
-      e('h1',{className:'sr-only'},'WanliWallet'),
+      e('h1',{className:'sr-only'},'Expense Tracker'),
 
       // ── Header ──
       e('div',{style:{textAlign:'center',marginBottom:'1.2rem',paddingTop:'0.4rem'}},
-        e('div',{className:'display',style:{fontSize:'1.95rem',color:'#3A1A2E',marginBottom:'0.5rem'}},'WanliWallet 🎀'),
-        e('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',gap:10}},
-          e('button',{onClick:()=>changeMonth(-1),style:{border:'none',background:'transparent',fontSize:24,padding:'2px 10px',minHeight:'auto',color:'#C08098'}},'‹'),
-          e('button',{onClick:()=>setShowPicker(true),style:{border:'1.5px solid rgba(220,160,180,0.5)',background:'rgba(255,255,255,0.78)',borderRadius:12,padding:'6px 14px',fontSize:14,fontWeight:600,color:'#7A4060',minHeight:'auto',gap:5}},
-            ymLabel(ym),e('span',{style:{fontSize:10,color:'#C09AAA'}},'▾')
-          ),
-          e('button',{onClick:()=>changeMonth(1),style:{border:'none',background:'transparent',fontSize:24,padding:'2px 10px',minHeight:'auto',color:'#C08098'}},'›')
-        )
+        e('div',{className:'display',style:{fontSize:'1.95rem',color:'#3A1A2E',marginBottom:'0.5rem'}},(appName||'Expense Tracker')+' 🎀'),
+        tab==='home'&&catFilter
+          ?e('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',gap:10}},
+              e('button',{onClick:()=>setCatFilter(null),style:{border:'1.5px solid rgba(220,160,180,0.5)',background:'rgba(255,255,255,0.78)',borderRadius:12,padding:'6px 14px',fontSize:14,color:'#7A4060',minHeight:'auto'}},'← All'),
+              e('div',{style:{display:'flex',alignItems:'center',gap:7}},
+                e('div',{style:{width:12,height:12,borderRadius:'50%',background:filteredCat?.color,flexShrink:0}}),
+                e('span',{style:{fontSize:14,fontWeight:600,color:'#7A4060'}},filteredCat?.label)
+              )
+            )
+          :e('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',gap:10}},
+              e('button',{onClick:()=>changeMonth(-1),style:{border:'none',background:'transparent',fontSize:24,padding:'2px 10px',minHeight:'auto',color:'#C08098'}},'‹'),
+              e('button',{onClick:()=>setShowPicker(true),style:{border:'1.5px solid rgba(220,160,180,0.5)',background:'rgba(255,255,255,0.78)',borderRadius:12,padding:'6px 14px',fontSize:14,fontWeight:600,color:'#7A4060',minHeight:'auto',gap:5}},
+                ymLabel(ym),e('span',{style:{fontSize:10,color:'#C09AAA'}},'▾')
+              ),
+              e('button',{onClick:()=>changeMonth(1),style:{border:'none',background:'transparent',fontSize:24,padding:'2px 10px',minHeight:'auto',color:'#C08098'}},'›')
+            )
       ),
 
-      // ══ HOME ══
-      tab==='home'&&e(React.Fragment,null,
+      // ══ HOME — Category detail view ══
+      tab==='home'&&catFilter&&e(React.Fragment,null,
+        e('div',{className:'card'},
+          e('div',{style:{display:'flex',alignItems:'center',gap:10,marginBottom:'0.9rem'}},
+            e('div',{style:{width:16,height:16,borderRadius:'50%',background:filteredCat?.color,flexShrink:0}}),
+            e('span',{className:'display',style:{fontSize:'1.15rem',color:'#3A1A2E'}},filteredCat?.label)
+          ),
+          e('div',{style:{display:'flex',gap:28}},
+            e('div',null,
+              e('p',{style:{fontSize:11,color:'#C09AAA',margin:'0 0 3px'}},'All-time total'),
+              e('div',{className:'display',style:{fontSize:'1.7rem',color:'#3A1A2E',lineHeight:1}},'S$'+fmt(catTotal))
+            ),
+            e('div',null,
+              e('p',{style:{fontSize:11,color:'#C09AAA',margin:'0 0 3px'}},'Transactions'),
+              e('div',{className:'display',style:{fontSize:'1.7rem',color:'#3A1A2E',lineHeight:1}},catAllExps.length)
+            )
+          )
+        ),
+        catAllExps.length===0
+          ?e('div',{className:'card',style:{textAlign:'center',padding:'2rem'}},
+              e('p',{style:{fontSize:14,color:'#C09AAA'}},'No entries for this category yet 🎀')
+            )
+          :catByMonth.map(([m,exps])=>e('div',{key:m,className:'card'},
+              e('p',{className:'lbl'},ymLabel(m)),
+              txnRows(exps)
+            ))
+      ),
+
+      // ══ HOME — Normal view ══
+      tab==='home'&&!catFilter&&e(React.Fragment,null,
         e('div',{className:'card'},
           e('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:13}},
             e('div',null,
@@ -240,69 +321,44 @@ function App(){
           chartData.length>0
             ?e('div',{style:{display:'flex',alignItems:'center',gap:16}},
                 e(Donut,{data:chartData,size:130,inner:38,outer:58}),
-                e('div',{style:{flex:1,minWidth:0}},chartData.map((item,i)=>e('div',{key:i,style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:9}},
+                e('div',{style:{flex:1,minWidth:0}},chartData.map((item,i)=>e('div',{key:i,onClick:()=>setCatFilter(item.id),style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:9,cursor:'pointer',padding:'2px 4px',borderRadius:8}},
                   e('div',{style:{display:'flex',alignItems:'center',gap:7,minWidth:0}},
                     e('div',{style:{width:9,height:9,borderRadius:'50%',background:item.color,flexShrink:0}}),
                     e('span',{style:{fontSize:13,color:'#8A5870',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},item.name)
                   ),
-                  e('span',{style:{fontSize:13,fontWeight:700,flexShrink:0,marginLeft:4}},'S$'+fmt(item.value))
+                  e('div',{style:{display:'flex',alignItems:'center',gap:4,flexShrink:0}},
+                    e('span',{style:{fontSize:13,fontWeight:700}},'S$'+fmt(item.value)),
+                    e('span',{style:{fontSize:12,color:'#D4A0B8'}},'›')
+                  )
                 )))
               )
             :e('p',{style:{fontSize:14,color:'#C09AAA',textAlign:'center',padding:'1rem 0'}},'No expenses yet this month 🎀')
         ),
         e('div',{className:'card'},
-          e('p',{className:'lbl'},'Budget by category'),
+          e('p',{className:'lbl'},'Budget by category — tap to view ›'),
           cats.map(c=>{
             const spent=spending[c.id]||0,budget=budgets[c.id]||0,over=spent>budget&&budget>0;
             const pct=budget>0?Math.min(Math.round((spent/budget)*100),100):0;
-            return e('div',{key:c.id,style:{marginBottom:14}},
+            return e('div',{key:c.id,className:'cat-row',onClick:()=>setCatFilter(c.id)},
               e('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:5}},
                 e('div',{style:{display:'flex',alignItems:'center',gap:7}},
                   e('div',{style:{width:10,height:10,borderRadius:'50%',background:c.color,flexShrink:0}}),
                   e('span',{style:{fontSize:14}},c.label)
                 ),
-                e('span',{style:{fontSize:12,color:over?'#C04040':'#B07090'}},budget>0?'S$'+fmt(spent)+' / S$'+fmt(budget):'S$'+fmt(spent))
+                e('div',{style:{display:'flex',alignItems:'center',gap:6}},
+                  e('span',{style:{fontSize:12,color:over?'#C04040':'#B07090'}},budget>0?'S$'+fmt(spent)+' / S$'+fmt(budget):'S$'+fmt(spent)),
+                  e('span',{style:{fontSize:14,color:'#D4A0B8'}},'›')
+                )
               ),
               budget>0
                 ?e('div',{className:'progress-track'},e('div',{className:'progress-fill',style:{width:pct+'%',background:over?'#C04040':c.color}}))
-                :e('p',{style:{fontSize:11,color:'#C09AAA',margin:'2px 0 0',fontStyle:'italic'}},'No budget set — go to Settings')
+                :e('p',{style:{fontSize:11,color:'#C09AAA',margin:'2px 0 0',fontStyle:'italic'}},'No budget set')
             );
           })
         ),
         monthExp.length>0&&e('div',{className:'card'},
           e('p',{className:'lbl'},'Transactions'),
-          monthExp.map(exp=>{
-            const c=catById(exp.category),isDel=delExpId===exp.id;
-            return e('div',{key:exp.id,style:{borderRadius:12,overflow:'hidden',marginBottom:4}},
-              e('div',{className:'txn-row'},
-                e('div',{style:{display:'flex',alignItems:'center',gap:10,minWidth:0}},
-                  e('div',{style:{width:40,height:40,borderRadius:13,background:(c?.color||'#888')+'28',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}},
-                    e('div',{style:{width:12,height:12,borderRadius:'50%',background:c?.color||'#888'}})
-                  ),
-                  e('div',{style:{minWidth:0}},
-                    e('p',{style:{fontSize:14,fontWeight:600,margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},exp.description),
-                    e('p',{style:{fontSize:11,color:'#B07090',margin:'2px 0 0'}},
-                      new Date(exp.date+'T00:00:00').toLocaleDateString('en-SG',{day:'numeric',month:'short'}),
-                      ' · ',e('span',{style:{color:c?.color}},c?.label||'Unknown'),
-                      exp.notes&&e('span',{style:{color:'#C09AAA'}},' · '+exp.notes)
-                    )
-                  )
-                ),
-                e('div',{style:{display:'flex',alignItems:'center',gap:2,flexShrink:0,marginLeft:8}},
-                  e('span',{style:{fontSize:14,fontWeight:700,marginRight:2}},'S$'+fmt(exp.amount)),
-                  e('button',{onClick:()=>startEdit(exp),className:'icon-btn','aria-label':'Edit'},'✏️'),
-                  e('button',{onClick:()=>setDelExpId(isDel?null:exp.id),className:'icon-btn',style:{color:isDel?'#C04040':'#C09AAA'},'aria-label':'Delete'},'🗑️')
-                )
-              ),
-              isDel&&e('div',{className:'danger-zone',style:{display:'flex',alignItems:'center',justifyContent:'space-between'}},
-                e('span',{style:{fontSize:12,color:'#C04040'}},'Remove this entry?'),
-                e('div',{style:{display:'flex',gap:8}},
-                  e('button',{onClick:()=>setDelExpId(null),style:{fontSize:12,padding:'5px 12px'}},'Cancel'),
-                  e('button',{onClick:()=>{setExp(p=>p.filter(ex=>ex.id!==exp.id));setDelExpId(null);},style:{fontSize:12,padding:'5px 12px',color:'#C04040',borderColor:'#E8A0B0'}},'Delete')
-                )
-              )
-            );
-          })
+          txnRows(monthExp)
         )
       ),
 
@@ -311,8 +367,8 @@ function App(){
         expenses.length===0
           ?e('div',{className:'card',style:{textAlign:'center',padding:'2.5rem 1rem'}},
               e('p',{style:{fontSize:32,marginBottom:12}},'🎀'),
-              e('p',{style:{fontSize:15,color:'#8A5870',fontWeight:600},'className':'display'},'No history yet'),
-              e('p',{style:{fontSize:13,color:'#C09AAA',marginTop:8},'key':'sub'},'Add your first expense to see monthly totals here!')
+              e('p',{className:'display',style:{fontSize:15,color:'#8A5870'}},'No history yet'),
+              e('p',{style:{fontSize:13,color:'#C09AAA',marginTop:8}},'Add your first expense to see monthly totals here!')
             )
           :histByYear.map(([year,months])=>
               e('div',{key:year,className:'card'},
@@ -351,22 +407,16 @@ function App(){
           e('h2',{className:'display',style:{fontSize:'1.3rem',color:'#3A1A2E'}},editId?'Edit expense ✏️':'New expense 🎀'),
           editId&&e('button',{onClick:cancelEdit,className:'cancel-link'},'Cancel')
         ),
-        e('div',{className:'field'},
-          e('label',null,'Description'),
+        e('div',{className:'field'},e('label',null,'Description'),
           e('input',{ref:descRef,type:'text',placeholder:'e.g. Grab to Orchard',value:form.description,onChange:sf('description'),className:formErr.description?'err':'',autoComplete:'off',autoCorrect:'off'})
         ),
-        e('div',{className:'field'},
-          e('label',null,'Amount (SGD)'),
+        e('div',{className:'field'},e('label',null,'Amount (SGD)'),
           e('input',{type:'number',inputMode:'decimal',placeholder:'0.00',min:'0',step:'0.01',value:form.amount,onChange:sf('amount'),className:formErr.amount?'err':''})
         ),
-        e('div',{className:'field'},
-          e('label',null,'Category'),
+        e('div',{className:'field'},e('label',null,'Category'),
           e('select',{value:form.category,onChange:sf('category')},cats.map(c=>e('option',{key:c.id,value:c.id},c.label)))
         ),
-        e('div',{className:'field'},
-          e('label',null,'Date'),
-          e('input',{type:'date',value:form.date,onChange:sf('date')})
-        ),
+        e('div',{className:'field'},e('label',null,'Date'),e('input',{type:'date',value:form.date,onChange:sf('date')})),
         e('div',{style:{marginBottom:'1.25rem'}},
           e('label',{style:{fontSize:13,color:'#8A5870',display:'block',marginBottom:5}},'Notes (optional)'),
           e('input',{type:'text',placeholder:'e.g. split with friends',value:form.notes,onChange:sf('notes')})
@@ -377,6 +427,14 @@ function App(){
 
       // ══ SETTINGS ══
       tab==='settings'&&e(React.Fragment,null,
+        e('div',{className:'card'},
+          e('h2',{className:'display',style:{fontSize:'1.3rem',margin:'0 0 1.2rem',color:'#3A1A2E'}},'App name 🎀'),
+          e('div',{className:'field'},
+            e('label',null,'Your name for this app'),
+            e('input',{type:'text',placeholder:'Expense Tracker',value:appName,onChange:ev=>setAppName(ev.target.value),maxLength:30})
+          ),
+          e('p',{style:{fontSize:11,color:'#C09AAA',marginTop:-4}},'Updates the title shown at the top')
+        ),
         e('div',{className:'card'},
           e('h2',{className:'display',style:{fontSize:'1.3rem',margin:'0 0 1.2rem',color:'#3A1A2E'}},'Monthly budgets 💰'),
           cats.map(c=>e('div',{key:c.id,className:'field'},
@@ -418,7 +476,10 @@ function App(){
             e('button',{onClick:addCat,className:'btn-primary',style:{width:'100%',padding:'14px',fontSize:15}},'+ Add category')
           )
         )
-      )
+      ),
+
+      // Footer
+      e('p',{style:{textAlign:'center',fontSize:11,color:'rgba(176,112,144,0.5)',padding:'0.75rem 0 0.25rem',letterSpacing:'0.03em'}},'made by @wakii___')
     ),
 
     // ── Bottom nav ──
@@ -430,7 +491,8 @@ function App(){
     )
   );
 }
-ReactDOM.render(React.createElement(App),document.getElementById('root'));
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));
 </script>
 </body>
 </html>
